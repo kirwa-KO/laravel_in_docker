@@ -12,7 +12,7 @@ RUN	apt-get update	&& 			\
 	php7.3-fpm php7.3-mysql		\
 	php7.3-xml php7.3-mbstring	\
 	wget dpkg lsb-release gnupg	\
-	unzip vim curl	&&			\
+	unzip vim curl sudo	&&		\
 	rm -rf /var/www/html/*
 
 
@@ -49,12 +49,14 @@ COPY srcs/sh/run.sh /root/
 # run init.sh to create pma user and set mysql root a password
 # install composer
 # install laravel
+#install nodejs
 RUN unzip /var/www/html/phpMyAdmin.zip -d /var/www/html/ && rm -rf /var/www/html/phpMyAdmin.zip						&& \
 	/bin/bash /root/install_mysql.sh && /bin/rm -rf /root/install_mysql.sh											&& \
 	/bin/bash /root/init.sh && /bin/rm -rf /root/init.sh															&& \
 	/bin/rm -rf /root/create_phpmy_admin_db.sql																		&& \
 	wget https://getcomposer.org/installer && php installer	&& rm -rf installer && mv composer.phar /bin/composer	&& \
-	composer global require laravel/installer
+	composer global require laravel/installer																		&& \
+	curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get update && apt-get -y install nodejs
 
 # copy config file pf phpMyAdmin to user pma user
 # and also use phpmyadmin database
